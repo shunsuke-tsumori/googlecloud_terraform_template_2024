@@ -10,7 +10,7 @@ resource "google_project_iam_member" "wif_principal" {
   ])
   project = data.google_project.current.project_id
   role    = each.value
-  member = "principalSet://iam.googleapis.com/${google_iam_workload_identity_pool.pool.name}/attribute.repository/${local.my_github_repository}"
+  member  = "principalSet://iam.googleapis.com/${google_iam_workload_identity_pool.pool.name}/attribute.repository/${local.my_github_repository}"
 }
 
 resource "google_storage_bucket_iam_member" "backend_viewer" {
