@@ -1,0 +1,53 @@
+name: "1.1. infra CI for dev"
+
+on:
+  pull_request:
+    branches:
+      - "main"
+
+jobs:
+  ci_dev:
+    name: "ci_dev"
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+    permissions:
+      id-token: write
+      contents: read
+    env:
+      WORKLOAD_IDENTITY_PROVIDER: "projects/500315244546/locations/global/workloadIdentityPools/github-pool/providers/github-provider"
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ env.WORKLOAD_IDENTITY_PROVIDER }}
+
+      - name: Detect Terraform version
+        run: |
+          printf "TF_VERSION=%s" $(cat .terraform-version) >> $GITHUB_ENV
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: ${{ env.TF_VERSION }}
+          terraform_wrapper: false
+
+      - name: Terraform Format
+        run: terraform fmt -recursive -check
+
+      - name: Terraform Init
+        run: terraform init
+        working-directory: ./env/dev
+
+      - name: Terraform Validate
+        run: terraform validate -no-color
+        working-directory: ./env/dev
+
+      - name: Terraform Plan
+        run: terraform plan -no-color
+        working-directory: ./env/dev
