@@ -17,3 +17,9 @@ resource "google_project_service" "service" {
   service            = each.value
   disable_on_destroy = false
 }
+
+module "vm" {
+  source = "../../module/vm"
+
+  env = local.env
+}
