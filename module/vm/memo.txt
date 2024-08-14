@@ -1,0 +1,4 @@
+gcloud iam workload-identity-pools describe "github-pool" \
+  --project="tmp-20240814" \
+  --location="global" \
+  --format="value(name)"
