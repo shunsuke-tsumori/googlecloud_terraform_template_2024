@@ -27,5 +27,6 @@ resource "google_project_service" "service" {
 module "wif" {
   source = "../../module/wif"
 
-  env = local.env
+  env                 = local.env
+  backend_bucket_name = google_storage_bucket.tfstate_backend.name
 }
