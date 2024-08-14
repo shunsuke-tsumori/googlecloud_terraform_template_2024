@@ -18,8 +18,14 @@ resource "google_project_service" "service" {
   disable_on_destroy = false
 }
 
-module "vm" {
-  source = "../../module/vm"
+#module "vm" {
+#  source = "../../module/vm"
+#
+#  env = local.env
+#}
+
+module "wif" {
+  source = "../../module/wif"
 
   env = local.env
 }
