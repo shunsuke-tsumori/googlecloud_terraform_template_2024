@@ -18,6 +18,10 @@ resource "google_project_service" "service" {
   disable_on_destroy = false
 }
 
+module "tfbackend" {
+  source = "../../module/tfbackend"
+}
+
 module "vm" {
   source = "../../module/vm"
 
@@ -28,5 +32,5 @@ module "wif" {
   source = "../../module/wif"
 
   env                 = local.env
-  backend_bucket_name = google_storage_bucket.tfstate_backend.name
+  backend_bucket_name = module.tfbackend.backend_bucket_name
 }
